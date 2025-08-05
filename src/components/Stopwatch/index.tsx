@@ -16,18 +16,20 @@ import { useStopwatch } from "./state";
 import classes from "./style.module.css";
 
 export const Stopwatch = () => {
+  debugger;
   const [{ id, started, elapsed, colorScheme }, dispatch] = useStopwatch();
 
   const notification = useNotification();
 
   useEffect(() => {
     if (!id) {
-      const { pathname } = window.location;
-      const id = pathname === "/" ? nanoid(5) : pathname.substring(1);
+      const { search} = window.location;
+      const queryId = new URLSearchParams(search).get('id');
+      const id = queryId ?? nanoid(5);
 
       dispatch({ type: "load", id });
 
-      window.history.replaceState({}, "", "/" + id);
+      window.history.replaceState({}, "", `?id=${id}`);
     }
   }, [dispatch, id]);
 
